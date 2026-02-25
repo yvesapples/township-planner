@@ -1,0 +1,80 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Township Planner (Offline)</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-badge">🏡</div>
+        <div>
+          <div class="brand-title">Township Planner</div>
+          <div class="brand-sub">Offline • LocalStorage</div>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-item" data-route="home" data-label="Dashboard" title="Dashboard">
+          <span class="nav-icon">📊</span><span class="nav-label">Dashboard</span>
+        </button>
+        <button class="nav-item" data-route="crops" data-label="Crops" title="Crops">
+          <span class="nav-icon">🌾</span><span class="nav-label">Crops</span>
+        </button>
+        <button class="nav-item" data-route="factories" data-label="Factories" title="Factories">
+          <span class="nav-icon">🏭</span><span class="nav-label">Factories</span>
+        </button>
+        <button class="nav-item" data-route="foundries" data-label="Foundries" title="Foundries">
+          <span class="nav-icon">⚒️</span><span class="nav-label">Foundries</span>
+        </button>
+        <button class="nav-item" data-route="farm" data-label="Farm Buildings" title="Farm Buildings">
+          <span class="nav-icon">🐄</span><span class="nav-label">Farm Buildings</span>
+        </button>
+        <button class="nav-item" data-route="barn" data-label="Inventory" title="Inventory">
+          <span class="nav-icon">📦</span><span class="nav-label">Inventory</span>
+        </button>
+        <button class="nav-item" data-route="transport" data-label="Transport" title="Transport">
+          <span class="nav-icon">🚚</span><span class="nav-label">Transport</span>
+        </button>
+        <button class="nav-item" data-route="settings" data-label="Settings" title="Settings">
+          <span class="nav-icon">⚙️</span><span class="nav-label">Settings</span>
+        </button>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="header">
+        <div>
+          <h1 id="pageTitle">Dashboard</h1>
+          <p id="pageSubtitle" class="muted"></p>
+        </div>
+        <button id="btnSidebarToggle" class="icon sidebar-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+        <div class="header-actions" id="headerActions"></div>
+      </header>
+
+      <section class="content" id="content"></section>
+    </main>
+  </div>
+
+  <dialog id="modal">
+    <form method="dialog" class="modal">
+      <div class="modal-head">
+        <h3 id="modalTitle">Modal</h3>
+        <button id="modalClose" class="icon" type="button" value="cancel" aria-label="Close">✕</button>
+      </div>
+      <div id="modalBody" class="modal-body"></div>
+      <div class="modal-foot">
+        <button id="modalCancel" type="button" value="cancel" class="secondary">Cancel</button>
+        <button id="modalPrimary" type="button" value="ok" class="primary">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
+
+
