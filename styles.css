@@ -824,3 +824,16 @@ html, body {
     min-width: 720px;
   }
 }
+/* Horizontal scroll for Production Advisor on mobile */
+@media (max-width: 900px){
+
+  .ops-card{
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .ops-card .table{
+    min-width: 720px;
+  }
+
+}
