@@ -7446,3 +7446,25 @@ function initMobileNav() {
 // Call on load and resize
 initMobileNav();
 window.addEventListener('resize', initMobileNav);
+// Add scroll detection for the sidebar gradient
+function checkSidebarScroll() {
+  const sidebar = document.querySelector('.sidebar');
+  const nav = document.querySelector('.nav');
+  if (!sidebar || !nav) return;
+  
+  // Check if scrolled to the end
+  const isAtEnd = nav.scrollLeft + nav.clientWidth >= nav.scrollWidth - 10;
+  if (isAtEnd) {
+    sidebar.classList.add('scrolled-end');
+  } else {
+    sidebar.classList.remove('scrolled-end');
+  }
+}
+
+// Add scroll listener to the nav
+const nav = document.querySelector('.nav');
+if (nav) {
+  nav.addEventListener('scroll', checkSidebarScroll);
+  // Check on load
+  setTimeout(checkSidebarScroll, 100);
+}
