@@ -7427,3 +7427,22 @@ setInterval(()=>{
   }
   updateTimerTextNodes();
 }, 1000);
+// Mobile navigation improvements
+function initMobileNav() {
+  const isMobile = window.innerWidth <= 768;
+  
+  // Hide sidebar toggle on mobile
+  const toggleBtn = $("#btnSidebarToggle");
+  if (toggleBtn) {
+    toggleBtn.style.display = isMobile ? 'none' : 'inline-flex';
+  }
+  
+  // Make sure body doesn't have sidebar-expanded class on mobile
+  if (isMobile) {
+    document.body.classList.remove("sidebar-expanded");
+  }
+}
+
+// Call on load and resize
+initMobileNav();
+window.addEventListener('resize', initMobileNav);
