@@ -396,6 +396,23 @@ label:has(.booster-toggle:checked){
 }
 label.field{display:flex; flex-direction:column; gap:6px; font-size:12px; color:var(--muted)}
 .table{width:100%; border-collapse:collapse}
+/* Keep table scrolling INSIDE the card */
+.card{
+  overflow:hidden;
+}
+
+.card .table{
+  display:block;
+  overflow-x:auto;
+  width:100%;
+}
+
+.card .table thead,
+.card .table tbody{
+  display:table;
+  width:100%;
+  table-layout:fixed;
+}
 /* Keep tables inside their card */
 .card table{
   width:100%;
