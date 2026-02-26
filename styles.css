@@ -837,3 +837,7 @@ html, body {
   }
 
 }
+.ops-card{
+  overflow-x: auto;
+  touch-action: pan-x;
+}
