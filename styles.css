@@ -790,71 +790,13 @@ body.compact-mode .dash-left{
 body.compact-mode .ops-card{
   padding:10px;
 }
-/* --- Production Advisor: mobile list view --- */
-@media (max-width: 640px){
+/* Make dashboard cards blend with background on mobile */
+@media (max-width: 900px){
 
-  /* Make the whole table become a vertical list */
-  .advisor-table{
-    display:block;
-    width:100%;
+  .ops-card{
+    border:none;
+    background:transparent;
+    box-shadow:none;
   }
 
-  /* Hide the header row on mobile */
-  .advisor-table thead{
-    display:none;
-  }
-
-  /* Each row becomes a "card" */
-  .advisor-table tbody,
-  .advisor-table tr{
-    display:block;
-    width:100%;
-  }
-
-  .advisor-table tr{
-    border:1px solid var(--border);
-    border-radius:14px;
-    background:rgba(255,255,255,0.02);
-    margin:10px 0;
-    padding:10px;
-  }
-
-  /* Each cell becomes a labelled line */
-  .advisor-table td{
-    display:grid;
-    grid-template-columns: 110px 1fr;
-    gap:10px;
-    padding:6px 0;
-    border:0 !important;
-    white-space:normal;       /* allow wrapping */
-    overflow:visible;
-    text-overflow:unset;
-  }
-
-  /* Labels for each column (based on column order) */
-  .advisor-table td:nth-child(1)::before{ content:"Transport"; color:var(--muted); font-size:12px; }
-  .advisor-table td:nth-child(2)::before{ content:"Item";      color:var(--muted); font-size:12px; }
-  .advisor-table td:nth-child(3)::before{ content:"Qty";       color:var(--muted); font-size:12px; }
-  .advisor-table td:nth-child(4)::before{ content:"Source";    color:var(--muted); font-size:12px; }
-  .advisor-table td:nth-child(5)::before{ content:"Time";      color:var(--muted); font-size:12px; }
-  .advisor-table td:nth-child(6)::before{ content:""; }
-
-  /* Make the item name stand out a bit */
-  .advisor-table td:nth-child(2){
-    font-weight:700;
-  }
-
-  /* Put the Go to button full-width and easy to tap */
-  .advisor-table td:nth-child(6){
-    grid-template-columns: 1fr;
-    padding-top:10px;
-  }
-
-  .advisor-table td:nth-child(6) .dash-go-link,
-  .advisor-table td:nth-child(6) button,
-  .advisor-table td:nth-child(6) a{
-    width:100%;
-    justify-content:center;
-    min-height:44px;
-  }
 }
