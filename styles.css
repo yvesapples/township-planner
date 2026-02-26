@@ -398,6 +398,25 @@ label.field{display:flex; flex-direction:column; gap:6px; font-size:12px; color:
 .table{width:100%; border-collapse:collapse}
 .table th, .table td{padding:10px 8px; border-bottom:1px solid var(--border); text-align:left; font-size:14px}
 .table th{color:var(--muted); font-weight:600}
+/* Keep tables inside their card */
+.card table{
+  width:100%;
+  table-layout:fixed;
+}
+
+/* Allow the last column (Go to button) to stay visible */
+.table td:last-child,
+.table th:last-child{
+  width:80px;
+  text-align:right;
+}
+
+/* Prevent long text from pushing the table wider */
+.table td{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
 .pill{
   display:inline-flex;
   align-items:center;
