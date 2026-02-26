@@ -841,3 +841,25 @@ html, body {
   overflow-x: auto;
   touch-action: pan-x;
 }
+/* ✅ Android-friendly horizontal scrolling for dashboard tables */
+@media (max-width: 900px){
+
+  /* Make the TABLE be the scroll container */
+  .dash-wrap .table{
+    display:block;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    max-width:100%;
+  }
+
+  /* Force content to stay on one line so it becomes wider than the card */
+  .dash-wrap .table th,
+  .dash-wrap .table td{
+    white-space:nowrap;
+  }
+
+  /* Ensure it's wide enough to scroll */
+  .dash-wrap .table{
+    min-width: 760px;
+  }
+}
