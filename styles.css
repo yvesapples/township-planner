@@ -31,6 +31,7 @@ body{
   margin:0;
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
   background: var(--bg);
+  color:var(--text);
 }
 .app{display:flex; min-height:100vh}
 .sidebar{
@@ -392,45 +393,6 @@ label:has(.booster-toggle:checked){
 }
 label.field{display:flex; flex-direction:column; gap:6px; font-size:12px; color:var(--muted)}
 .table{width:100%; border-collapse:collapse}
-.dash-wrap{
-  overflow-x:auto;
-}
-/* Keep table scrolling INSIDE the card */
-.card{
-  overflow:hidden;
-}
-
-.card .table{
-  display:block;
-  overflow-x:auto;
-  width:100%;
-}
-
-.card .table thead,
-.card .table tbody{
-  display:table;
-  width:100%;
-  table-layout:fixed;
-}
-/* Keep tables inside their card */
-.card table{
-  width:100%;
-  table-layout:fixed;
-}
-
-/* Allow the last column (Go to button) to stay visible */
-.table td:last-child,
-.table th:last-child{
-  width:80px;
-  text-align:right;
-}
-
-/* Prevent long text from pushing the table wider */
-.table td{
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
 .table th, .table td{padding:10px 8px; border-bottom:1px solid var(--border); text-align:left; font-size:14px}
 .table th{color:var(--muted); font-weight:600}
 .pill{
@@ -673,7 +635,23 @@ dialog::backdrop{background:rgba(0,0,0,0.55)}
     box-shadow:0 0 0 10px rgba(59,130,246,0);
   }
 }
-@media (max-width: 900px)
+@media (max-width: 900px){
+  .inventory-grid{
+    grid-template-columns:1fr;
+  }
+  .farm-buildings-grid{
+    grid-template-columns:1fr;
+  }
+  .heli-orders-grid{
+    grid-template-columns:1fr;
+  }
+  .foundry-products-grid{
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+  }
+  .dash-layout{
+    grid-template-columns:1fr;
+  }
+}
 @media (max-width: 640px){
   .foundry-products-grid{
     grid-template-columns:1fr;
@@ -773,119 +751,34 @@ body.compact-mode .dash-left{
 body.compact-mode .ops-card{
   padding:10px;
 }
-/* Make dashboard cards blend with background on mobile */
+
+/* --- Mobile polish (developer tidy) --- */
 @media (max-width: 900px){
-
-  .ops-card{
-    border:none;
-    background:transparent;
-    box-shadow:none;
-  }
-
-}
-/* --- Unified mobile layout --- */
-@media (max-width: 900px){
-
-  /* Dashboard */
-  .dash-layout{
-    grid-template-columns:1fr;
-  }
-
-  /* Grids */
-  .grid{
-    grid-template-columns:1fr;
-  }
-
-  .farm-buildings-grid,
-  .heli-orders-grid{
-    grid-template-columns:1fr;
-  }
-
-  .foundry-products-grid{
-    grid-template-columns:repeat(2, minmax(0, 1fr));
-  }
-
-}
-html, body {
-  overflow-x: hidden;
-}
-/* Production Advisor (and other dashboard tables): allow sideways scroll inside the card */
-.dash-wrap .ops-card{
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-.dash-wrap .ops-card .table{
-  display: block;        /* makes overflow-x work reliably */
-  width: max-content;    /* table can be wider than card */
-  min-width: 100%;       /* but never smaller than card */
-}
-
-/* Optional: ensure there's actually something to scroll */
-@media (max-width: 900px){
-  .dash-wrap .ops-card .table{
-    min-width: 720px;
-  }
-}
-/* Horizontal scroll for Production Advisor on mobile */
-@media (max-width: 900px){
-
-  .ops-card{
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .ops-card .table{
-    min-width: 720px;
-  }
-
-}
-.ops-card{
-  overflow-x: auto;
-  touch-action: pan-x;
-}
-
-
-  /* Ensure it's wide enough to scroll */
-  .dash-wrap .table{
-    min-width: 760px;
-  }
-}
-/* Mobile: stop the big gap + stop "Go to" being cut off (Dashboard tables) */
-@media (max-width: 900px){
-  /* allow sideways scroll only inside dashboard cards */
+  /* Keep dashboard tables usable on phones without breaking page scroll */
   .dash-wrap .ops-card{
     overflow-x:auto;
     -webkit-overflow-scrolling:touch;
   }
-
-  /* keep columns from collapsing/wrapping */
-  .dash-wrap .ops-card .table th,
-  .dash-wrap .ops-card .table td{
-    white-space:nowrap;
+  .dash-wrap .ops-card .table{
+    min-width:720px; /* ensures sideways scroll exists on most phones */
   }
-
-  /* give the last columns enough width */
-  .dash-wrap .ops-card .table th:nth-child(4),
-  .dash-wrap .ops-card .table td:nth-child(4){
-    min-width:140px; /* Source */
-  }
-
-  .dash-wrap .ops-card .table th:nth-child(5),
-  .dash-wrap .ops-card .table td:nth-child(5){
-    min-width:80px; /* Est. Time */
-  }
-
-  .dash-wrap .ops-card .table th:last-child,
-  .dash-wrap .ops-card .table td:last-child{
-    min-width:86px;  /* Go to column */
-    text-align:right;
-  }
-
-  /* make the button itself wide enough for "Go to" */
   .dash-go-link{
     min-width:72px;
-    padding:0 12px;
     white-space:nowrap;
   }
+}
+
+/* Optional: if you wrap the Production Advisor table in <div class="advisor-scroll">...</div> */
+.advisor-scroll{
+  width:100%;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+}
+.advisor-scroll .table{
+  width:max-content;
+  min-width:100%;
+}
+.advisor-scroll .table th,
+.advisor-scroll .table td{
+  white-space:nowrap;
 }
