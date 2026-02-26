@@ -391,7 +391,7 @@ label:has(.booster-toggle:checked){
   color:#d7fbe6;
 }
 label.field{display:flex; flex-direction:column; gap:6px; font-size:12px; color:var(--muted)}
-.table{width:max-content; border-collapse:collapse}
+.table{width:100%; border-collapse:collapse}
 .dash-wrap{
   overflow-x:auto;
 }
@@ -849,5 +849,43 @@ html, body {
   /* Ensure it's wide enough to scroll */
   .dash-wrap .table{
     min-width: 760px;
+  }
+}
+/* Mobile: stop the big gap + stop "Go to" being cut off (Dashboard tables) */
+@media (max-width: 900px){
+  /* allow sideways scroll only inside dashboard cards */
+  .dash-wrap .ops-card{
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+
+  /* keep columns from collapsing/wrapping */
+  .dash-wrap .ops-card .table th,
+  .dash-wrap .ops-card .table td{
+    white-space:nowrap;
+  }
+
+  /* give the last columns enough width */
+  .dash-wrap .ops-card .table th:nth-child(4),
+  .dash-wrap .ops-card .table td:nth-child(4){
+    min-width:140px; /* Source */
+  }
+
+  .dash-wrap .ops-card .table th:nth-child(5),
+  .dash-wrap .ops-card .table td:nth-child(5){
+    min-width:80px; /* Est. Time */
+  }
+
+  .dash-wrap .ops-card .table th:last-child,
+  .dash-wrap .ops-card .table td:last-child{
+    min-width:86px;  /* Go to column */
+    text-align:right;
+  }
+
+  /* make the button itself wide enough for "Go to" */
+  .dash-go-link{
+    min-width:72px;
+    padding:0 12px;
+    white-space:nowrap;
   }
 }
