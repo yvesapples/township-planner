@@ -850,6 +850,9 @@ html, body {
     overflow-x:auto;
     -webkit-overflow-scrolling:touch;
     max-width:100%;
+
+    /* IMPORTANT: allow vertical scrolling too */
+    touch-action: pan-x pan-y;
   }
 
   /* Force content to stay on one line so it becomes wider than the card */
@@ -857,6 +860,12 @@ html, body {
   .dash-wrap .table td{
     white-space:nowrap;
   }
+
+  /* Ensure it's wide enough to scroll */
+  .dash-wrap .table{
+    min-width: 760px;
+  }
+}
 
   /* Ensure it's wide enough to scroll */
   .dash-wrap .table{
