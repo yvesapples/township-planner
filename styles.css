@@ -6,7 +6,10 @@
   --card2:#0f1a2f;
   --text:#e7eefc;
   --muted:#a9b6d3;
-  --border:rgba(255,255,255,0.09);
+  --border:rgba(255,255,255,0.09);.table td:last-child,
+.table th:last-child{
+  min-width:90px;
+}
   --shadow:0 10px 25px rgba(0,0,0,0.35);
   --r:16px;
   --g:12px;
@@ -396,10 +399,6 @@ label.field{display:flex; flex-direction:column; gap:6px; font-size:12px; color:
   width:100%;
   border-collapse:collapse;
   table-layout:auto;
-}
-.table th,
-.table td{
-  white-space:nowrap;
 }
 .table td:last-child,
 .table th:last-child{
