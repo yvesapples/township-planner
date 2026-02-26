@@ -806,3 +806,21 @@ body.compact-mode .ops-card{
 html, body {
   overflow-x: hidden;
 }
+/* Production Advisor (and other dashboard tables): allow sideways scroll inside the card */
+.dash-wrap .ops-card{
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.dash-wrap .ops-card .table{
+  display: block;        /* makes overflow-x work reliably */
+  width: max-content;    /* table can be wider than card */
+  min-width: 100%;       /* but never smaller than card */
+}
+
+/* Optional: ensure there's actually something to scroll */
+@media (max-width: 900px){
+  .dash-wrap .ops-card .table{
+    min-width: 720px;
+  }
+}
