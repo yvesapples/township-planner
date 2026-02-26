@@ -6998,7 +6998,7 @@ function renderPlan(){
       </div>
     </div>
     <div class="card">
-      <table class="table advisor-table">
+      <table class="table">
         <thead>
           <tr>
             <th>Metric</th>
