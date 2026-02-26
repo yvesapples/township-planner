@@ -674,23 +674,7 @@ dialog::backdrop{background:rgba(0,0,0,0.55)}
     box-shadow:0 0 0 10px rgba(59,130,246,0);
   }
 }
-@media (max-width: 900px){
-  .inventory-grid{
-    grid-template-columns:1fr;
-  }
-  .farm-buildings-grid{
-    grid-template-columns:1fr;
-  }
-  .heli-orders-grid{
-    grid-template-columns:1fr;
-  }
-  .foundry-products-grid{
-    grid-template-columns:repeat(2, minmax(0, 1fr));
-  }
-  .dash-layout{
-    grid-template-columns:1fr;
-  }
-}
+@media (max-width: 900px)
 @media (max-width: 640px){
   .foundry-products-grid{
     grid-template-columns:1fr;
@@ -797,6 +781,29 @@ body.compact-mode .ops-card{
     border:none;
     background:transparent;
     box-shadow:none;
+  }
+
+}
+/* --- Unified mobile layout --- */
+@media (max-width: 900px){
+
+  /* Dashboard */
+  .dash-layout{
+    grid-template-columns:1fr;
+  }
+
+  /* Grids */
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .farm-buildings-grid,
+  .heli-orders-grid{
+    grid-template-columns:1fr;
+  }
+
+  .foundry-products-grid{
+    grid-template-columns:repeat(2, minmax(0, 1fr));
   }
 
 }
