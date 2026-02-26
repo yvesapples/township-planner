@@ -807,3 +807,6 @@ body.compact-mode .ops-card{
   }
 
 }
+html, body {
+  overflow-x: hidden;
+}
