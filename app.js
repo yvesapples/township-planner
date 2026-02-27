@@ -1295,6 +1295,10 @@ const defaultData = () => ({
     {id: uid(), name:"Strawberries", durationMin:45, qtyDefault:1},
     {id: uid(), name:"Pine Trees", durationMin:60, qtyDefault:1},
   ],
+  cityMarket: {
+  items: [],           // {id, name, qty}
+  marketEndMs: null    // timestamp for auto-reset
+},
   factories: [
     {id: uid(), name:"Dairy Factory", speedBonusPct:0, products:[
       {id: uid(), name:"Cream", durationMin:15},
@@ -2018,6 +2022,7 @@ modal.addEventListener("close", ()=>{
 const routes = {
   home: {title:"Dashboard", subtitle:"Overview of trains, plane, helicopter, factories, and crops", render: renderHome},
   crops: {title:"Crops", subtitle:"Track crop timers and add harvests to your Inventory", render: renderCrops},
+  citymarket: {title:"City Market",subtitle:"Add available produce and send to Inventory", render: renderCityMarket},
   factories: {title:"Factories", subtitle:"Manage factory products and run up to 6 slots per factory", render: renderFactories},
   foundries: {title:"Foundries", subtitle:"Manage foundry products and ingot timing", render: renderFoundries},
   farm: {title:"Farm Buildings", subtitle:"Feed animals and collect products automatically", render: renderFarm},
@@ -4413,6 +4418,169 @@ function renderBarn(){
       .map(catName=>`<option value="${escapeAttr(catName)}">${escapeHtml(catName)}</option>`)
       .join("");
   }
+  function renderCityMarket() {
+  const content = $("#content");
+
+  // ensure structure
+  state.cityMarket = state.cityMarket || { items: [], marketEndMs: null };
+
+  const market = state.cityMarket;
+  const now = nowMs();
+
+  // compute needed items from transport logic
+  const neededMap = (() => {
+    const m = new Map();
+    const add = (item, qty) => {
+      const key = normalizeItemKey(item);
+      if (!key) return;
+      m.set(key, (m.get(key) || 0) + qty);
+    };
+
+    // trains
+    (state.trains || []).forEach(train => {
+      (train?.requests || []).forEach(r => add(r.item, r.qty));
+    });
+    // plane
+    if (state.plane?.rows) {
+      state.plane.rows.forEach(row => {
+        row.slots.forEach(s => add(s.item, s.qty));
+      });
+    }
+    // helicopters
+    (state.helicopterOrders || []).forEach(order => {
+      (order?.slots || []).forEach(s => add(s.item, s.qty));
+    });
+
+    return m;
+  })();
+
+  // top controls
+  const remainingMs = market.marketEndMs ? Math.max(0, market.marketEndMs - now) : null;
+  const remainingText = remainingMs ? fmtCountdown(now + remainingMs) : "-";
+
+  content.innerHTML = `
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <div class="card-title">City Market</div>
+          <div class="small">Temporary market items that reset after timer expires.</div>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:10px; gap:12px; align-items:center; flex-wrap:wrap">
+        <label class="row small" style="gap:6px; align-items:center; margin:0">
+          Minutes
+          <input id="marketMinutes" type="number" min="1" step="1" value="15" style="width:110px" />
+        </label>
+        <button class="primary" id="startMarketTimer">Start Timer</button>
+        <span class="pill progress">Timer: ${remainingText}</span>
+        <button class="secondary" id="resetMarketNow">Reset Now</button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:12px">
+      <div class="card-head">
+        <div class="card-title">Available Produce</div>
+      </div>
+      <div id="marketGrid" class="grid" style="margin-top:10px"></div>
+      <button class="primary" id="btnAddMarketItem" style="margin-top:12px">+ Add Produce</button>
+    </div>
+  `;
+
+  // render items
+  const grid = $("#marketGrid");
+  grid.innerHTML = market.items.map(item => {
+    const key = normalizeItemKey(item.name);
+    const needed = neededMap.has(key);
+    const needClass = needed ? "factory-ing-ok" : "";
+
+    return `
+      <div class="card ${needClass}" style="grid-column:span 4">
+        <div class="card-head">
+          <div class="card-title">${escapeHtml(item.name)}</div>
+          <div class="row">
+            <button class="icon" data-del-market="${item.id}" title="Delete">🗑️</button>
+          </div>
+        </div>
+
+        <div class="small">Qty: ${item.qty}</div>
+        <div class="small">Needed for transport: ${needed ? "YES" : "No"}</div>
+
+        <div class="row" style="margin-top:10px">
+          <button class="primary" data-addinv="${item.id}">+ Add to Inventory</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  // --- handlers ---
+
+  // start timer
+  $("#startMarketTimer").onclick = () => {
+    const mins = Math.max(1, Number($("#marketMinutes").value || 15));
+    market.marketEndMs = nowMs() + mins * 60000;
+    save();
+    render();
+  };
+
+  // reset now
+  $("#resetMarketNow").onclick = () => {
+    market.items = [];
+    market.marketEndMs = null;
+    save();
+    render();
+  };
+
+  // add produce modal
+  $("#btnAddMarketItem").onclick = () => {
+    openModal({
+      title: "Add Market Produce",
+      primaryText: "Add",
+      bodyHtml: `
+        <label class="field">Item name
+          <input id="marketName" data-item-input="true" type="text" />
+        </label>
+        <label class="field">Quantity
+          <input id="marketQty" type="number" min="1" step="1" value="1" />
+        </label>
+      `,
+      onSave: () => {
+        const name = $("#marketName").value.trim();
+        const qty = Number($("#marketQty").value || 1);
+        if (!name) throw new Error("Name required");
+        market.items.push({ id: uid(), name, qty });
+        save();
+        render();
+      }
+    });
+  };
+
+  // delete produce
+  $$("[data-del-market]").forEach(btn => {
+    btn.onclick = () => {
+      const id = btn.dataset.delMarket;
+      market.items = market.items.filter(x => x.id !== id);
+      save();
+      render();
+    };
+  });
+
+  // add to inventory button
+  $$("[data-addinv]").forEach(btn => {
+    btn.onclick = () => {
+      const id = btn.dataset.addinv;
+      const item = market.items.find(x => x.id === id);
+      if (!item) return;
+
+      upsertBarnItem(item.name, "Products", Number(item.qty));
+      toast(`Added ${item.qty} × ${item.name} to Inventory`);
+
+      save();
+      render();
+    };
+  });
+}
+
   const settings = normalizeSettings(state.settings);
   state.settings = settings;
   const inventoryPriority = settings.inventoryPriority;
@@ -4533,6 +4701,7 @@ function renderBarn(){
     <div class="card-head">
       <div>
         <div class="card-title">Inventory</div>
+        <div class="nav-item" data-route="citymarket">City Market</div>
         <div class="small">Total quantity: <b>${totalQty}</b></div>
       </div>
       <div class="row">
@@ -7422,6 +7591,16 @@ setInterval(()=>{
 setInterval(()=>{
   // Always update statuses first.
   const tick = updateJobStatuses();
+    // --- City Market Timer Auto-Reset ---
+  if (state.cityMarket?.marketEndMs) {
+    if (nowMs() >= state.cityMarket.marketEndMs) {
+      state.cityMarket.items = [];
+      state.cityMarket.marketEndMs = null;
+      save();
+      if (!isEditingAnyInput()) render();
+    }
+  }
+
   const editing = isEditingAnyInput();
 
   // Defer visual re-render while user is actively editing.
