@@ -4537,6 +4537,7 @@ function renderBarn(){
       </div>
       <div class="row">
         <button class="primary" id="btnAddBarn">+ Add Item</button>
+        <button class="secondary" id="btnZeroAllBarn">Set All to Zero</button>
       </div>
     </div>
     <div class="row" style="margin-top:10px; gap:12px">
@@ -4575,6 +4576,20 @@ function renderBarn(){
   content.appendChild(tableCard);
 
   const listEl = $("#barnList");
+  const zeroBtn = $("#btnZeroAllBarn");
+if (zeroBtn) {
+  zeroBtn.onclick = () => {
+    if (!confirm("Set ALL inventory quantities to zero?")) return;
+
+    state.barn.forEach(item => {
+      item.qty = 0;
+    });
+
+    save();
+    draw();
+  };
+}
+
   const search = $("#barnSearch");
   const cat = $("#barnCat");
   const viewMode = $("#inventoryViewMode");
