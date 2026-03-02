@@ -1295,10 +1295,6 @@ const defaultData = () => ({
     {id: uid(), name:"Strawberries", durationMin:45, qtyDefault:1},
     {id: uid(), name:"Pine Trees", durationMin:60, qtyDefault:1},
   ],
-  cityMarket: {
-  items: [],           // {id, name, qty}
-  marketEndMs: null    // timestamp for auto-reset
-},
   factories: [
     {id: uid(), name:"Dairy Factory", speedBonusPct:0, products:[
       {id: uid(), name:"Cream", durationMin:15},
@@ -2022,7 +2018,6 @@ modal.addEventListener("close", ()=>{
 const routes = {
   home: {title:"Dashboard", subtitle:"Overview of trains, plane, helicopter, factories, and crops", render: renderHome},
   crops: {title:"Crops", subtitle:"Track crop timers and add harvests to your Inventory", render: renderCrops},
-  citymarket: {title:"City Market",subtitle:"Add available produce and send to Inventory", render: renderCityMarket},
   factories: {title:"Factories", subtitle:"Manage factory products and run up to 6 slots per factory", render: renderFactories},
   foundries: {title:"Foundries", subtitle:"Manage foundry products and ingot timing", render: renderFoundries},
   farm: {title:"Farm Buildings", subtitle:"Feed animals and collect products automatically", render: renderFarm},
